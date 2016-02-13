@@ -15,5 +15,16 @@ namespace FluentAssertions.Json
             var bStr = b.ToString(Newtonsoft.Json.Formatting.Indented);
             aStr.Should().Be(bStr, because);
         }
+
+        public static JTokenAssertions Should(this JToken jToken)
+        {
+            return new JTokenAssertions(jToken);
+
+        }
+
+        public static JObjectAssertions Should(this JObject jObject)
+        {
+            return new JObjectAssertions(jObject);
+        }
     }
 }
