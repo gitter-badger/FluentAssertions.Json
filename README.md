@@ -1,4 +1,4 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/u42b929walkd6086?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/fluentassertions-autofac)
+[![Build status](https://ci.appveyor.com/api/projects/status/joenxf5xklwoyyb4?svg=true)](https://ci.appveyor.com/project/awesome-inc-build/fluentassertions-json)
 <!-- [![Documentation Status](https://readthedocs.org/projects/fluentassertionsjson/badge/?version=latest)](http://fluentassertionsjson.rtfd.org/en/latest/) 
 [![NuGet](https://img.shields.io/nuget/v/FluentAssertions.Json.svg?style=flat-square)](https://www.nuget.org/packages/FluentAssertions.Json/) 
 [![NuGet](https://img.shields.io/nuget/dt/FluentAssertions.Json.svg?style=flat-square)](https://www.nuget.org/packages/FluentAssertions.Json/) 
