@@ -13,5 +13,14 @@ namespace FluentAssertions.Json
         {
             actualJson.ShouldEqualJson(expectedJson);
         }
+
+        [Test]
+        [TestCase("{id:1,admin:true}", "{admin:false,id:1}", "Expected property 'admin' to be 'false' but was 'true'.")]
+        public void PrintPrettyFailure(string actualJson, string nonMatchingJson, string expectedMessage)
+        {
+            actualJson.Invoking(x => x.ShouldEqualJson(nonMatchingJson))
+                .ShouldThrow<AssertionException>()
+                .WithMessage(expectedMessage);
+        }
     }
 }
