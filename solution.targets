@@ -57,7 +57,7 @@
 
 	<!--## Specifying your repository token for coveralls.io -->
 	<PropertyGroup>
-		<CoverAllsToken>[yourtoken]</CoverAllsToken>
+		<CoverAllsToken>YljI0enMVjZ9oIaqS16ePVReROIsOQ91L</CoverAllsToken>
 	</PropertyGroup>
 
 	<!-- ## Uncomment	to override the default nuget server to push packages to in the 'Deploy' target
