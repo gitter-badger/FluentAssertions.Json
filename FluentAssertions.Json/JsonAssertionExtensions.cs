@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System.Diagnostics;
+using Newtonsoft.Json.Linq;
 
 namespace FluentAssertions.Json
 {
-    public static class JsonAssert
+    [DebuggerNonUserCode]
+    public static class JsonAssertionExtensions
     {
         public static void ShouldEqualJson(this string jsonResponse, string expectedJson, string because = "")
         {
@@ -19,7 +21,6 @@ namespace FluentAssertions.Json
         public static JTokenAssertions Should(this JToken jToken)
         {
             return new JTokenAssertions(jToken);
-
         }
 
         public static JObjectAssertions Should(this JObject jObject)

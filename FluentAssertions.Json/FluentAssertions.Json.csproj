@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JObjectAssertions.cs" />
-    <Compile Include="JsonAssert.cs" />
+    <Compile Include="JsonAssertionExtensions.cs" />
     <Compile Include="JsonAssert_Should.cs" />
     <Compile Include="JTokenAssertions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
