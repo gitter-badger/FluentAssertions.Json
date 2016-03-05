@@ -4,7 +4,7 @@ namespace FluentAssertions.Json
 {
     [TestFixture]
     // ReSharper disable InconsistentNaming
-    internal class JsonAssert_Should
+    internal class ShouldEqualJson_Should
     {
         [Test]
         [TestCase("{friends:[{id:123,name:\"Corby Page\"},{id:456,name:\"Carter Page\"}]}",
