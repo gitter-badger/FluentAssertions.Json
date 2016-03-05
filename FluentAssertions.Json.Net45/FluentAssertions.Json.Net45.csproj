@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JTokenAssertions_Should.cs" />
+    <Compile Include="LearningTests.cs" />
     <Compile Include="ShouldEqualJson_Should.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

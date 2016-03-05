@@ -11,5 +11,6 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)JsonAssertionExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)JTokenAssertions.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ObjectDiffPatch.cs" />
   </ItemGroup>
 </Project>

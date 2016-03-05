@@ -47,7 +47,6 @@
   <ItemGroup>
     <None Include="Package.nuspec" />
     <None Include="packages.config" />
-    <None Include="FluentAssertions.Json.NuGet.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FluentAssertions.Json.Net45\FluentAssertions.Json.Net45.csproj">
