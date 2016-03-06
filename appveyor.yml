@@ -31,4 +31,4 @@
   before_build:
     - ps: gitversion /l console /output buildserver
   build_script:
-    - build.bat /t:Test;Package /v:m
+    - build.bat /t:CoverageUpload;Package /v:m
