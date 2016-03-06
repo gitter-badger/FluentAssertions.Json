@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using FluentAssertions.Common;
 using FluentAssertions.Execution;
 using FluentAssertions.Formatting;
 using FluentAssertions.Primitives;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace FluentAssertions.Json
@@ -22,13 +22,13 @@ namespace FluentAssertions.Json
         
         public JTokenAssertions(JToken subject)
         {
-            if (subject == null) throw new ArgumentNullException(nameof(subject));
             Subject = subject;
         }
 
         /// <summary>
         ///     Returns the type of the subject the assertion applies on.
         /// </summary>
+        [ExcludeFromCodeCoverage]
         protected override string Context => nameof(JToken);
 
         /// <summary>
@@ -122,7 +122,6 @@ namespace FluentAssertions.Json
             var diff = ObjectDiffPatch.GenerateDiff(Subject, expected);
             var key = diff.NewValues?.First ?? diff.OldValues?.First;
 
-
             Execute.Assertion
                 .ForCondition(diff.AreEqual)
                 .BecauseOf(because, reasonArgs)
@@ -191,7 +190,7 @@ namespace FluentAssertions.Json
             Execute.Assertion
                 .ForCondition(Subject.Value<string>() == expected)
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected JSON document '{0}' to have value {1}{reason}, but found {2}.",
+                .FailWith("Expected JSON property {0} to have value {1}{reason}, but found {2}.",
                     Subject.Path, expected, Subject.Value<string>());
 
             return new AndConstraint<JTokenAssertions>(this);
@@ -226,8 +225,8 @@ namespace FluentAssertions.Json
             Execute.Assertion
                 .ForCondition(jToken != null)
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected JSON document {0} to have child element \"" + expected.Escape(true) + "\"{reason}" +
-                          ", but no such child element was found.", Subject);
+                .FailWith("Expected JSON document {0} to have element \"" + expected.Escape(true) + "\"{reason}" +
+                          ", but no such element was found.", Subject);
 
             return new AndWhichConstraint<JTokenAssertions, JToken>(this, jToken);
         }

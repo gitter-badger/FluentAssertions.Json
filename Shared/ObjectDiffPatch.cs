@@ -34,10 +34,12 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace FluentAssertions.Json
 {
-    public class ObjectDiffPatch
+    [DebuggerNonUserCode]
+    internal class ObjectDiffPatch
     {
         private const string PrefixArraySize = "@@ Count";
         private const string PrefixRemovedFields = "@@ Removed";
@@ -107,7 +109,8 @@ namespace FluentAssertions.Json
             {
                 return result;
             }
-            else if (source == null || target == null)
+
+            if (source == null || target == null)
             {
                 result.OldValues = source;
                 result.NewValues = target;
@@ -156,6 +159,7 @@ namespace FluentAssertions.Json
         {
             if (result == null)
                 result = new ObjectDiffPatchResult();
+
             if (source == null)
             {
                 if (target != null)

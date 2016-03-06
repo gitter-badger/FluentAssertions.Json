@@ -27,14 +27,11 @@ namespace FluentAssertions.Json
         /// <returns>
         /// A <see cref="string" /> that represents this instance.
         /// </returns>
-        public string ToString(object value, bool useLineBreaks, IList<object> processedObjects = null,
+        public string ToString(object value, bool useLineBreaks = false, IList<object> processedObjects = null,
             int nestedPropertyLevel = 0)
         {
             var jToken = (JToken)value;
-            var formatted = jToken.ToString(Newtonsoft.Json.Formatting.Indented);
-            if (!useLineBreaks)
-                formatted = formatted.RemoveNewLines();
-            return formatted;
+            return useLineBreaks ? jToken.ToString(Newtonsoft.Json.Formatting.Indented) : jToken.ToString().RemoveNewLines();
         }
     }
 }
