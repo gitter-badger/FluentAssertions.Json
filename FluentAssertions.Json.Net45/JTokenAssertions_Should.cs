@@ -22,13 +22,16 @@ namespace FluentAssertions.Json
         }
 
         [Test]
-        [TestCase("{id:1,admin:true}", "{id:1,admin:false}", "Expected property 'admin' to be 'false' but was 'true'.")]
-        public void NotBeEquivalentTo(string actualJson, string expectedJson, string expectedMessage)
+        [TestCase("{id:1,admin:true}", "{id:1,admin:false}")]
+        public void NotBeEquivalentTo(string actualJson, string expectedJson)
         {
             var actual = JToken.Parse(actualJson);
             var expected = JToken.Parse(expectedJson);
 
             actual.Should().NotBeEquivalentTo(expected);
+
+            var expectedMessage = ExpectedMessage(actual, expected);
+
             actual.Should().Invoking(x => x.BeEquivalentTo(expected))
                 .ShouldThrow<AssertionException>()
                 .WithMessage(expectedMessage);
@@ -40,10 +43,28 @@ namespace FluentAssertions.Json
             var subject = JToken.Parse("{child:{subject:'foo'}}");
             var expected = JToken.Parse("{child:{expected:'bar'}}");
 
+            var expectedMessage = ExpectedMessage(subject, expected, "we want to test the failure {0}", "message");
+
             subject.Should().Invoking(x => x.BeEquivalentTo(expected, "we want to test the failure {0}", "message"))
                 .ShouldThrow<AssertionException>()
-                .WithMessage(
-                    "Expected local name of element at '/child' to be 'expected' because we want to test the failure message, but found 'subject'.");
+                .WithMessage(expectedMessage);
+        }
+
+        private static string ExpectedMessage(JToken actual, JToken expected,
+            string reason = null, params string[] reasonArgs)
+        {
+            var diff = ObjectDiffPatch.GenerateDiff(actual, expected);
+            var key = diff.NewValues?.First ?? diff.OldValues?.First;
+            var formatter = new JTokenFormatter();
+
+            var because = string.Empty;
+            if (!string.IsNullOrWhiteSpace(reason))
+                because = " because " + string.Format(reason, reasonArgs);
+
+            var expectedMessage = $"Expected JSON document {formatter.ToString(actual, false)}" +
+                                  $" to be equivalent to {formatter.ToString(expected, false)}" +
+                                  $"{because}, but differs at {formatter.ToString(key, false)}.";
+            return expectedMessage;
         }
     }
 }

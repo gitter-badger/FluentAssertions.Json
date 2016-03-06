@@ -2,7 +2,9 @@
 using System.Diagnostics;
 using FluentAssertions.Common;
 using FluentAssertions.Execution;
+using FluentAssertions.Formatting;
 using FluentAssertions.Primitives;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace FluentAssertions.Json
@@ -13,10 +15,15 @@ namespace FluentAssertions.Json
     [DebuggerNonUserCode]
     public class JTokenAssertions : ReferenceTypeAssertions<JToken, JTokenAssertions>
     {
-        public JTokenAssertions(JToken jToken)
+        static JTokenAssertions()
         {
-            if (jToken == null) throw new ArgumentNullException(nameof(jToken));
-            Subject = jToken;
+            Formatter.AddFormatter(new JTokenFormatter());
+        }
+        
+        public JTokenAssertions(JToken subject)
+        {
+            if (subject == null) throw new ArgumentNullException(nameof(subject));
+            Subject = subject;
         }
 
         /// <summary>
@@ -49,7 +56,7 @@ namespace FluentAssertions.Json
             Execute.Assertion
                 .ForCondition(JToken.DeepEquals(Subject, expected))
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected JSON element to be {0}{reason}, but found {1}.", expected, Subject);
+                .FailWith("Expected JSON document to be {0}{reason}, but found {1}.", expected, Subject);
 
             return new AndConstraint<JTokenAssertions>(this);
         }
@@ -82,14 +89,14 @@ namespace FluentAssertions.Json
                 .ForCondition((ReferenceEquals(Subject, null) && !ReferenceEquals(unexpected, null)) ||
                               !JToken.DeepEquals(Subject, unexpected))
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected JSON element not to be {0}{reason}.", unexpected);
+                .FailWith("Expected JSON document not to be {0}{reason}.", unexpected);
 
             return new AndConstraint<JTokenAssertions>(this);
         }
 
         /// <summary>
         ///     Asserts that the current <see cref="JToken" /> is equivalent to the <paramref name="expected" /> element,
-        ///     using its <see cref="JToken.DeepEquals()" /> implementation.
+        ///     using its <see cref="JToken.DeepEquals(JToken, JToken)" /> implementation.
         /// </summary>
         /// <param name="expected">The expected element</param>
         public AndConstraint<JTokenAssertions> BeEquivalentTo(JToken expected)
@@ -99,7 +106,7 @@ namespace FluentAssertions.Json
 
         /// <summary>
         ///     Asserts that the current <see cref="JToken" /> is equivalent to the <paramref name="expected" /> element,
-        ///     using its <see cref="JToken.DeepEquals()" /> implementation.
+        ///     using its <see cref="JToken.DeepEquals(JToken, JToken)" /> implementation.
         /// </summary>
         /// <param name="expected">The expected element</param>
         /// <param name="because">
@@ -112,18 +119,22 @@ namespace FluentAssertions.Json
         public AndConstraint<JTokenAssertions> BeEquivalentTo(JToken expected, string because,
             params object[] reasonArgs)
         {
+            var diff = ObjectDiffPatch.GenerateDiff(Subject, expected);
+            var key = diff.NewValues?.First ?? diff.OldValues?.First;
+
+
             Execute.Assertion
-                .ForCondition(JToken.DeepEquals(Subject, expected))
+                .ForCondition(diff.AreEqual)
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected JSON element {0} to be equivalent to {1}{reason}.",
-                    Subject, expected);
+                .FailWith("Expected JSON document {0} to be equivalent to {1}{reason}, but differs at {2}.",
+                    Subject, expected, key);
 
             return new AndConstraint<JTokenAssertions>(this);
         }
 
         /// <summary>
         ///     Asserts that the current <see cref="JToken" /> is not equivalent to the <paramref name="unexpected" /> element,
-        ///     using its <see cref="JToken.DeepEquals()" /> implementation.
+        ///     using its <see cref="JToken.DeepEquals(JToken, JToken)" /> implementation.
         /// </summary>
         /// <param name="unexpected">The unexpected element</param>
         public AndConstraint<JTokenAssertions> NotBeEquivalentTo(JToken unexpected)
@@ -133,7 +144,7 @@ namespace FluentAssertions.Json
 
         /// <summary>
         ///     Asserts that the current <see cref="JToken" /> is not equivalent to the <paramref name="unexpected" /> element,
-        ///     using its <see cref="JToken.DeepEquals()" /> implementation.
+        ///     using its <see cref="JToken.DeepEquals(JToken, JToken)" /> implementation.
         /// </summary>
         /// <param name="unexpected">The unexpected element</param>
         /// <param name="because">
@@ -180,7 +191,7 @@ namespace FluentAssertions.Json
             Execute.Assertion
                 .ForCondition(Subject.Value<string>() == expected)
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected JSON element '{0}' to have value {1}{reason}, but found {2}.",
+                .FailWith("Expected JSON document '{0}' to have value {1}{reason}, but found {2}.",
                     Subject.Path, expected, Subject.Value<string>());
 
             return new AndConstraint<JTokenAssertions>(this);
@@ -215,7 +226,7 @@ namespace FluentAssertions.Json
             Execute.Assertion
                 .ForCondition(jToken != null)
                 .BecauseOf(because, reasonArgs)
-                .FailWith("Expected JSON element {0} to have child element \"" + expected.Escape(true) + "\"{reason}" +
+                .FailWith("Expected JSON document {0} to have child element \"" + expected.Escape(true) + "\"{reason}" +
                           ", but no such child element was found.", Subject);
 
             return new AndWhichConstraint<JTokenAssertions, JToken>(this, jToken);

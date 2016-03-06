@@ -240,64 +240,59 @@ namespace FluentAssertions.Json
         {
             // deal with null values
             if (sourceJson == null || diffJson == null || !sourceJson.HasValues)
-            {
                 return diffJson;
-            }
-            else if (diffJson.Type != JTokenType.Object)
-            {
+
+            if (diffJson.Type != JTokenType.Object)
                 return diffJson;
-            }
+
             // deal with objects
-            else
+            var diffObj = (JObject)diffJson;
+            JToken token;
+            if (sourceJson.Type == JTokenType.Array)
             {
-                var diffObj = (JObject)diffJson;
-                JToken token;
-                if (sourceJson.Type == JTokenType.Array)
+                var sz = 0;
+                var foundArraySize = diffObj.TryGetValue(PrefixArraySize, out token);
+                if (foundArraySize)
                 {
-                    var sz = 0;
-                    var foundArraySize = diffObj.TryGetValue(PrefixArraySize, out token);
-                    if (foundArraySize)
+                    diffObj.Remove(PrefixArraySize);
+                    sz = token.Value<int>();
+                }
+                var array = (JArray) sourceJson;
+                // resize array
+                if (foundArraySize && array.Count != sz)
+                {
+                    var snapshot = (JArray) array.DeepClone();
+                    array.Clear();
+                    for (var i = 0; i < sz; i++)
                     {
-                        diffObj.Remove(PrefixArraySize);
-                        sz = token.Value<int>();
-                    }
-                    var array = (JArray) sourceJson;
-                    // resize array
-                    if (foundArraySize && array.Count != sz)
-                    {
-                        var snapshot = (JArray) array.DeepClone();
-                        array.Clear();
-                        for (var i = 0; i < sz; i++)
-                        {
-                            array.Add(i < snapshot.Count ? snapshot[i] : null);
-                        }
-                    }
-                    // patch it
-                    foreach (var f in diffObj)
-                    {
-                        int ix;
-                        if (Int32.TryParse(f.Key, out ix))
-                        {
-                            array[ix] = Patch(array[ix], f.Value);
-                        }
+                        array.Add(i < snapshot.Count ? snapshot[i] : null);
                     }
                 }
-                else
+                // patch it
+                foreach (var f in diffObj)
                 {
-                    var sourceObj = sourceJson as JObject ?? new JObject();
-                    // remove fields
-                    if (diffObj.TryGetValue(PrefixRemovedFields, out token))
+                    int ix;
+                    if (int.TryParse(f.Key, out ix))
                     {
-                        diffObj.Remove(PrefixRemovedFields);
-                        foreach (var f in (JArray) token)
-                            sourceObj.Remove(f.ToString());
+                        array[ix] = Patch(array[ix], f.Value);
                     }
+                }
+            }
+            else
+            {
+                var sourceObj = sourceJson as JObject ?? new JObject();
+                // remove fields
+                if (diffObj.TryGetValue(PrefixRemovedFields, out token))
+                {
+                    diffObj.Remove(PrefixRemovedFields);
+                    foreach (var f in (JArray) token)
+                        sourceObj.Remove(f.ToString());
+                }
 
-                    // patch it
-                    foreach (var f in diffObj)
-                    {
-                        sourceObj[f.Key] = Patch(sourceObj[f.Key], f.Value);
-                    }
+                // patch it
+                foreach (var f in diffObj)
+                {
+                    sourceObj[f.Key] = Patch(sourceObj[f.Key], f.Value);
                 }
             }
             return sourceJson;
@@ -320,7 +315,6 @@ namespace FluentAssertions.Json
         private static void AddToken(ObjectDiffPatchResult item, string fieldName, JToken oldToken, JToken newToken)
         {
             AddOldValuesToken(item, oldToken, fieldName);
-
             AddNewValuesToken(item, newToken, fieldName);
         }
 
@@ -358,7 +352,7 @@ namespace FluentAssertions.Json
         public JObject NewValues { get; set; }
     }
 
-    class ObjectDiffPatchJTokenComparer : IEqualityComparer<JToken>
+    internal class ObjectDiffPatchJTokenComparer : IEqualityComparer<JToken>
     {
         public bool Equals(JToken x, JToken y)
         {
@@ -368,9 +362,10 @@ namespace FluentAssertions.Json
                 return false;
             return JToken.DeepEquals(x, y);
         }
-        public int GetHashCode(JToken i)
+
+        public int GetHashCode(JToken jToken)
         {
-            return i.ToString().GetHashCode();
+            return jToken.ToString().GetHashCode();
         }
     }
 }
