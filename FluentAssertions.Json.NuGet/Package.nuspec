@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>FluentAssertions.Json</id>
+		<version>$Version$</version>
+		<title>FluentAssertions.Json</title>
+		<authors>Awesome Incremented and Contributors</authors>
+		<owners>Awesome Incremented and Contributors</owners>
+		<licenseUrl>http://www.opensource.org/licenses/mit-license.php</licenseUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>Fluent Assertions extensions for Newtonsoft.Json</description>
+		<summary>Fluent Assertions extensions for Newtonsoft.Json</summary>
+		<copyright/>
+		<releaseNotes>Revision: $Revision$</releaseNotes>
+		<projectUrl>https://github.com/awesome-inc/FluentAssertions.Json</projectUrl>
+		<developmentDependency>true</developmentDependency>
+		<dependencies>
+		<dependency id="FluentAssertions" version="4.2.2" />
+		<dependency id="Newtonsoft.Json" version="8.0.2" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\FluentAssertions.Json.Net45\bin\Release\FluentAssertions.Json.dll" target="lib\net45"/>
+	</files>
+</package>

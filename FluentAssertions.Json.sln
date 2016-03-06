@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Json", "FluentAssertions.Json\FluentAssertions.Json.csproj", "{BCCE2D0B-09CF-4E88-8080-39D733C4A689}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Json.Net45", "FluentAssertions.Json.Net45\FluentAssertions.Json.Net45.csproj", "{BCCE2D0B-09CF-4E88-8080-39D733C4A689}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Shared", "Shared\Shared.shproj", "{F702FE37-CA91-4C85-A8A2-61647577EF2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FluentAssertions.Json.NuGet", "FluentAssertions.Json.NuGet\FluentAssertions.Json.NuGet.csproj", "{ACF6DCEF-DADA-43D8-9994-A43239A1F928}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Shared\Shared.projitems*{bcce2d0b-09cf-4e88-8080-39d733c4a689}*SharedItemsImports = 4
+		Shared\Shared.projitems*{f702fe37-ca91-4c85-a8a2-61647577ef2c}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -15,6 +23,10 @@ Global
 		{BCCE2D0B-09CF-4E88-8080-39D733C4A689}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCCE2D0B-09CF-4E88-8080-39D733C4A689}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCCE2D0B-09CF-4E88-8080-39D733C4A689}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACF6DCEF-DADA-43D8-9994-A43239A1F928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACF6DCEF-DADA-43D8-9994-A43239A1F928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACF6DCEF-DADA-43D8-9994-A43239A1F928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACF6DCEF-DADA-43D8-9994-A43239A1F928}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
