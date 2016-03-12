@@ -6,6 +6,8 @@
 
 # FluentAssertions.Json
 
+[![Join the chat at https://gitter.im/awesome-inc/FluentAssertions.Json](https://badges.gitter.im/awesome-inc/FluentAssertions.Json.svg)](https://gitter.im/awesome-inc/FluentAssertions.Json?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Fluently testing Json responses.
 
 <!--
